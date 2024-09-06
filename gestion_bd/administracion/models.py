@@ -29,7 +29,7 @@ class Intervinientes(models.Model):
     direccion = models.TextField(blank=True)
     departamento = models.CharField(max_length=100)
     municipio = models.CharField(max_length=100)
-    rol = models.ForeignKey(Roles, on_delete=models.SET_NULL, null=True)
+    rol = models.ForeignKey(Roles, on_delete=models.SET_NULL, null=True, db_column='Rol_ID')
     sucursal = models.ForeignKey(Sucursal, on_delete=models.SET_NULL, null=True)
 
     class Meta:
