@@ -5,6 +5,8 @@ from administracion import views as administracion_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', administracion_views.home, name='home'),
+    path('login/', administracion_views.login_view, name='login'),
+    path('register/', administracion_views.register_view, name='register'),
     path('gestion/intervinientes/', administracion_views.IntervinientesView.as_view(), name='intervinientes_list'),
     path('gestion/intervinientes/create/', administracion_views.IntervinienteCreateView.as_view(), name='interviniente_create'),
     path('gestion/intervinientes/<int:pk>/edit/', administracion_views.IntervinienteUpdateView.as_view(), name='interviniente_edit'),

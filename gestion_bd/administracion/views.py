@@ -2,8 +2,37 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Intervinientes, Productos, Sucursal, Roles
-from .forms import IntervinienteForm, ProductoForm, SucursalForm, RolForm
+from .forms import IntervinienteForm, ProductoForm, SucursalForm, RolForm, RegistrationForm
+from django.contrib.auth import authenticate, login
 
+
+def home(request):
+    return render(request, 'home.html')
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Guarda el nuevo usuario en la base de datos
+            return redirect('login')  # Redirige a la página de inicio de sesión
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Cambia esto a la página a la que deseas redirigir después del inicio de sesión
+        else:
+            return render(request, 'login.html', {'error': 'Invalid credentials'})
+    return render(request, 'login.html')
+
+#Codigo nuevo
 def home(request):
     return render(request, 'home.html')
 

@@ -1,4 +1,6 @@
 from django.urls import path
+from . import views
+from administracion import views
 from .views import (
     IntervinienteListView, IntervinienteCreateView, IntervinienteUpdateView, IntervinienteDeleteView, IntervinientesDeleteView, IntervinientesUpdateView, IntervinientesView,
     ProductoListView, ProductoCreateView, ProductoUpdateView, ProductoDeleteView,
@@ -7,6 +9,8 @@ from .views import (
 )
 
 urlpatterns = [
+    
+   
 
 
     path('intervinientes/', IntervinientesView.as_view(), name='intervinientes_list'),

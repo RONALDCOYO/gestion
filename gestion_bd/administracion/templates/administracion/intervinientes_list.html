@@ -40,9 +40,5 @@
 </table>
 
 <h2>Crear Interviniente</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Crear</button>
-</form>
+<a href="{% url 'interviniente_create' %}" class="btn btn-primary">Crear Interviniente</a>
 {% endblock %}
