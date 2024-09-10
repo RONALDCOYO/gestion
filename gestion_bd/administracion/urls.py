@@ -1,12 +1,19 @@
 from django.urls import path
 from .views import (
-    IntervinienteListView, IntervinienteCreateView, IntervinienteUpdateView, IntervinienteDeleteView,
+    IntervinienteListView, IntervinienteCreateView, IntervinienteUpdateView, IntervinienteDeleteView, IntervinientesDeleteView, IntervinientesUpdateView, IntervinientesView,
     ProductoListView, ProductoCreateView, ProductoUpdateView, ProductoDeleteView,
     SucursalListView, SucursalCreateView, SucursalUpdateView, SucursalDeleteView,
     RolListView, RolCreateView, RolUpdateView, RolDeleteView
 )
 
 urlpatterns = [
+
+
+    path('intervinientes/', IntervinientesView.as_view(), name='intervinientes_list'),
+    path('intervinientes/<int:pk>/edit/', IntervinientesUpdateView.as_view(), name='intervinientes_edit'),
+    path('intervinientes/<int:pk>/delete/', IntervinientesDeleteView.as_view(), name='intervinientes_delete'),
+
+    ##Codigo nuevo
     path('intervinientes/', IntervinienteListView.as_view(), name='interviniente_list'),
     path('cld', IntervinienteCreateView.as_view(), name='interviniente_create'),
     path('intervinientes/<int:pk>/edit/', IntervinienteUpdateView.as_view(), name='interviniente_update'),

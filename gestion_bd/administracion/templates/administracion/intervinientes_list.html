@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Intervinientes</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Celular</th>
+            <th>Mail</th>
+            <th>Dirección</th>
+            <th>Departamento</th>
+            <th>Municipio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for interviniente in intervinientes %}
+        <tr>
+            <td>{{ interviniente.cedula }}</td>
+            <td>{{ interviniente.nombre }}</td>
+            <td>{{ interviniente.apellido }}</td>
+            <td>{{ interviniente.celular }}</td>
+            <td>{{ interviniente.mail }}</td>
+            <td>{{ interviniente.direccion }}</td>
+            <td>{{ interviniente.departamento }}</td>
+            <td>{{ interviniente.municipio }}</td>
+            <td>
+                <a href="{% url 'interviniente_edit' interviniente.pk %}">Editar</a>
+                <form action="{% url 'interviniente_delete' interviniente.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Borrar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Crear Interviniente</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Crear</button>
+</form>
+{% endblock %}
