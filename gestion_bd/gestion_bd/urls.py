@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from administracion import views as administracion_views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', administracion_views.home, name='home'),
@@ -23,4 +24,12 @@ urlpatterns = [
     path('gestion/sucursales/create/', administracion_views.SucursalCreateView.as_view(), name='sucursal_create'),
     path('gestion/sucursales/<int:pk>/edit/', administracion_views.SucursalUpdateView.as_view(), name='sucursal_edit'),
     path('gestion/sucursales/<int:pk>/delete/', administracion_views.SucursalDeleteView.as_view(), name='sucursal_delete'),
+    path('gestion/pedidos/', administracion_views.PedidoListView.as_view(), name='pedido_list'),
+    path('gestion/pedidos/create/', administracion_views.PedidoCreateView.as_view(), name='pedido_create'),
+    path('gestion/pedidos/<int:pk>/edit/', administracion_views.PedidoUpdateView.as_view(), name='pedido_edit'),
+    #Clientes
+    path('gestion/clientes/', administracion_views.ClienteListView.as_view(), name='clientes_list'),
+    path('gestion/clientes/create/', administracion_views.ClienteCreateView.as_view(), name='cliente_create'),
+    path('gestion/clientes/<int:pk>/edit/', administracion_views.ClienteUpdateView.as_view(), name='cliente_edit'),
+    path('gestion/clientes/<int:pk>/delete/', administracion_views.ClienteDeleteView.as_view(), name='cliente_delete'),
 ]

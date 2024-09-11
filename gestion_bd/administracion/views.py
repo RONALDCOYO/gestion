@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Intervinientes, Productos, Sucursal, Roles
-from .forms import IntervinienteForm, ProductoForm, SucursalForm, RolForm, RegistrationForm
+from .models import Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
+from .forms import (IntervinienteForm, ProductoForm, SucursalForm, 
+                    RolForm, RegistrationForm, PedidoForm, ClienteForm)
 from django.contrib.auth import authenticate, login
 
 
@@ -128,3 +129,44 @@ class RolDeleteView(DeleteView):
     model = Roles
     template_name = 'administracion/rol_confirm_delete.html'
     success_url = reverse_lazy('rol_list')
+
+#Vista para pedidos
+
+class PedidoListView(ListView):
+    model = Pedido
+    template_name = 'administracion/pedido_list.html'
+    context_object_name = 'pedidos'
+
+class PedidoCreateView(CreateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'administracion/pedido_form.html'
+    success_url = reverse_lazy('pedido_list')
+
+class PedidoUpdateView(UpdateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'administracion/pedido_form.html'
+    success_url = reverse_lazy('pedido_list')
+    
+class ClienteListView(ListView):
+    model = Cliente
+    template_name = 'administracion/clientes_list.html'
+    context_object_name = 'clientes'
+
+class ClienteCreateView(CreateView):
+    model = Cliente
+    form_class = ClienteForm
+    template_name = 'administracion/cliente_form.html'
+    success_url = reverse_lazy('clientes_list')
+
+class ClienteUpdateView(UpdateView):
+    model = Cliente
+    form_class = ClienteForm
+    template_name = 'administracion/cliente_form.html'
+    success_url = reverse_lazy('clientes_list')
+
+class ClienteDeleteView(DeleteView):
+    model = Cliente
+    template_name = 'administracion/cliente_confirm_delete.html'
+    success_url = reverse_lazy('clientes_list')    

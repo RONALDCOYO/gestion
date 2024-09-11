@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from administracion import views
+from administracion.views import PedidoListView, PedidoCreateView, PedidoUpdateView
+from administracion import views as administracion_views
 from .views import (
     IntervinienteListView, IntervinienteCreateView, IntervinienteUpdateView, IntervinienteDeleteView, IntervinientesDeleteView, IntervinientesUpdateView, IntervinientesView,
     ProductoListView, ProductoCreateView, ProductoUpdateView, ProductoDeleteView,
@@ -34,4 +36,7 @@ urlpatterns = [
     path('roles/new/', RolCreateView.as_view(), name='rol_create'),
     path('roles/<int:pk>/edit/', RolUpdateView.as_view(), name='rol_update'),
     path('roles/<int:pk>/delete/', RolDeleteView.as_view(), name='rol_delete'),
+    #Rutas para pedidos
+    path('gestion/pedidos/', administracion_views.PedidoListView.as_view(), name='pedido_list'),
+    
 ]

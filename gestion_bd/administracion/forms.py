@@ -1,5 +1,5 @@
 from django import forms
-from .models import Intervinientes, Productos, Sucursal, Roles
+from .models import Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -38,3 +38,13 @@ class RolForm(forms.ModelForm):
     class Meta:
         model = Roles
         fields = '__all__'  # Esto incluirá todos los campos del modelo Roles.
+        
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = '__all__'
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['cedula', 'nombre', 'apellido', 'direccion', 'telefono', 'email']
