@@ -42,7 +42,8 @@ class RolForm(forms.ModelForm):
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = '__all__'
+        fields = ['cliente', 'producto', 'observaciones', 'fecha_pedido', 'cantidad', 'fecha_germinacion', 'lugar', 'modelo', 'numero_lote', 'valor_pedido', 'abonos', 'saldo', 'cantidad_semilla', 'fecha_entrega', 'remision']
+
 
 class ClienteForm(forms.ModelForm):
     class Meta:

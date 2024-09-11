@@ -69,7 +69,8 @@ class Cliente(models.Model):
 
 # Modelo Pedido
 class Pedido(models.Model):
-    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)  # Relación con Cliente
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, default=1)  # ID de un producto por defecto
     observaciones = models.TextField(null=True, blank=True)
     fecha_pedido = models.DateField()
     cantidad = models.IntegerField()
@@ -83,9 +84,16 @@ class Pedido(models.Model):
     cantidad_semilla = models.IntegerField()
     fecha_entrega = models.DateField(null=True, blank=True)
     remision = models.CharField(max_length=50, null=True, blank=True)
-
+    
     class Meta:
-        db_table = 'Pedidos'  # Nombre de la tabla en la base de datos
+        db_table = 'Pedido' 
 
     def __str__(self):
         return f"Pedido {self.numero_lote} - Cliente: {self.cliente}"
+    
+    def save(self, *args, **kwargs):
+        # Al guardar un pedido, descontar la cantidad de productos del inventario
+        if self.pk is None:  # Solo descontar la cantidad si el pedido es nuevo
+            self.producto.cantidad -= self.cantidad
+            self.producto.save()  # Guardar los cambios en el inventario de productos
+        super(Pedido, self).save(*args, **kwargs)

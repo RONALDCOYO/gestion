@@ -143,6 +143,21 @@ class PedidoCreateView(CreateView):
     template_name = 'administracion/pedido_form.html'
     success_url = reverse_lazy('pedido_list')
 
+    def form_valid(self, form):
+        # Obtiene el producto y la cantidad del pedido
+        producto = form.cleaned_data['producto']
+        cantidad_pedido = form.cleaned_data['cantidad']
+
+        # Verifica si hay suficiente cantidad en el inventario
+        if producto.cantidad >= cantidad_pedido:
+            # Descuenta la cantidad del inventario
+            producto.cantidad -= cantidad_pedido
+            producto.save()
+            return super().form_valid(form)
+        else:
+            form.add_error('cantidad', 'No hay suficiente inventario para este pedido.')
+            return self.form_invalid(form)
+
 class PedidoUpdateView(UpdateView):
     model = Pedido
     form_class = PedidoForm
