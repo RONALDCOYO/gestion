@@ -3,33 +3,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Site{% endblock %}</title>
-    {% load static %}
+    
+    <!-- Incluir Bootstrap CSS desde CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Incluir tu propio archivo de estilos CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <h1>Mi Plantuladora</h1>
+    <header class="bg-primary text-white text-center py-4">
+        <h1>INVENTARIO PLANTULAS</h1>
     </header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'intervinientes_list' %}">Intervinientes</a></li>
-            <li><a href="{% url 'rol_list' %}">Roles</a></li>
-            <li><a href="{% url 'producto_list' %}">Productos</a></li>
-            <li><a href="{% url 'sucursal_list' %}">Sucursales</a></li>
-            <li><a href="{% url 'admin:index' %}">Admin</a></li>
-        </ul>
+    
+    <!-- Navbar de navegación con clases de Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Mi Plantuladora</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'intervinientes_list' %}">Intervinientes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rol_list' %}">Roles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'producto_list' %}">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'sucursal_list' %}">Sucursales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'pedido_list' %}">Pedidos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'clientes_list' %}">Clientes</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <main>
+
+    <!-- Contenedor principal con Bootstrap -->
+    <main class="container mt-4">
         {% block content %}
-        <!-- Default content -->
+        <!-- Contenido dinámico -->
         {% endblock %}
     </main>
-    <footer>
+    
+    <!-- Footer con clases de Bootstrap -->
+    <footer class="bg-light text-center py-3">
         <p>&copy; 2024 My Site</p>
     </footer>
+
+    <!-- Incluir JavaScript de Bootstrap desde CDN (Opcional para interactividad) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

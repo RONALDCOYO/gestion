@@ -1,42 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Lista de Pedidos</h2>
+<h2>Pedidos</h2>
+
 <table>
     <thead>
         <tr>
             <th>Cliente</th>
+            <th>Producto</th>
             <th>Fecha Pedido</th>
-            <th>Cantidad</th>
-            <th>Valor Pedido</th>
+            <th>Valor</th>
+            <th>Saldo</th>
+            <th>Remisión</th>
+            <th>Abonos</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         {% for pedido in pedidos %}
         <tr>
-            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.cliente.nombre }}</td>
+            <td>{{ pedido.producto.nombre }}</td>
             <td>{{ pedido.fecha_pedido }}</td>
-            <td>{{ pedido.cantidad }}</td>
             <td>{{ pedido.valor_pedido }}</td>
+            <td>{{ pedido.saldo }}</td>
+            <td>{{ pedido.remision }}</td>
+            <td>
+                <!-- Mostrar los abonos del pedido -->
+                {% for abono in pedido.abonos.all %}
+                <p>Abono: {{ abono.cantidad_abonada }} Fecha: {{ abono.fecha_abono }}</p>
+                {% endfor %}
+                <!-- Botón para realizar un abono -->
+                <a href="{% url 'realizar_abono' pedido.pk %}" class="btn btn-primary">Realizar Abono</a>
+            </td>
             <td>
                 <a href="{% url 'pedido_edit' pedido.pk %}">Editar</a>
-                <a href="{% url 'pedido_delete' pedido.pk %}">Borrar</a>
                 <form action="{% url 'pedido_delete' pedido.pk %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit">Borrar</button>
                 </form>
             </td>
-            <td>
-                <a href="{% url 'pedido_edit' pedido.pk %}">Editar</a> |
-                <a href="{% url 'pedido_delete' pedido.pk %}">Eliminar</a> |
-                <a href="{% url 'realizar_abono' pedido.pk %}">Realizar Abono</a>
-            </td>
-      
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<a href="{% url 'pedido_create' %}">Crear Pedido</a>
 {% endblock %}

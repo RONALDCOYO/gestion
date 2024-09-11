@@ -68,29 +68,32 @@ class Cliente(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 # Modelo Pedido
+# Modelo Pedido
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, default=1)
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
     observaciones = models.TextField(null=True, blank=True)
     fecha_pedido = models.DateField()
     cantidad = models.IntegerField()
+    cantidad_semilla = models.IntegerField()  # Verifica que exista este campo
     fecha_germinacion = models.DateField(null=True, blank=True)
+    fecha_entrega = models.DateField(null=True, blank=True)
     lugar = models.CharField(max_length=100)
     modelo = models.CharField(max_length=50)
     numero_lote = models.CharField(max_length=50)
     valor_pedido = models.DecimalField(max_digits=10, decimal_places=2)
-    abonos = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)
     saldo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    cantidad_semilla = models.IntegerField()
-    fecha_entrega = models.DateField(null=True, blank=True)
     remision = models.CharField(max_length=50, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        # Calcula el saldo automáticamente
-        if self.abonos is None:
-            self.abonos = 0
-        self.saldo = self.valor_pedido - self.abonos
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Pedido {self.numero_lote} - Cliente: {self.cliente}"
+
+
+# Modelo Abono
+class Abono(models.Model):
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='lista_abonos')
+    cantidad_abonada = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_abono = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Abono {self.cantidad_abonada} para pedido {self.pedido.numero_lote}"

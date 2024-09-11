@@ -1,36 +1,19 @@
 /* static/css/style.css */
 
+/* static/css/styles.css */
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #343a40;
+    background-color: #a06c29; /* Color de fondo claro */
 }
 
 h1 {
-    color: #1cc440;
+    font-size: 2.5rem;
+    font-weight: bold;
 }
 
-a {
-    color: #6da56b;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-form {
-    margin: 20px 0;
-}
-
-button {
-    background-color: #007bff;
+footer {
+    background-color: #343a40;
     color: #fff;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
+    padding: 10px 0;
 }
 
-button:hover {
-    background-color: #0056b3;
-}

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
+from .models import Abono, Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
 from .forms import (IntervinienteForm, ProductoForm, SucursalForm, 
                     RolForm, RegistrationForm, PedidoForm, ClienteForm, AbonoForm)
 from django.contrib.auth import authenticate, login
@@ -134,8 +134,11 @@ class RolDeleteView(DeleteView):
 
 class PedidoListView(ListView):
     model = Pedido
-    template_name = 'administracion/pedido_list.html'
+    template_name = 'pedidos.html'
     context_object_name = 'pedidos'
+
+    def get_queryset(self):
+        return Pedido.objects.prefetch_related('lista_abonos')
 
 class PedidoCreateView(CreateView):
     model = Pedido
@@ -183,7 +186,7 @@ def realizar_abono(request, pk):
             # Recalcular el saldo
             pedido.saldo = pedido.valor_pedido - pedido.abonos
             pedido.save()
-            return redirect('pedido_list')  # O redirige a la página donde se muestran los pedidos
+            return redirect('lista_abonos')  # O redirige a la página donde se muestran los pedidos
     else:
         form = AbonoForm(instance=pedido)
     
@@ -211,3 +214,18 @@ class ClienteDeleteView(DeleteView):
     model = Cliente
     template_name = 'administracion/cliente_confirm_delete.html'
     success_url = reverse_lazy('clientes_list')    
+
+
+class AbonoCreateView(CreateView):
+    model = Abono
+    form_class = AbonoForm
+    template_name = 'administracion/abono_form.html'
+
+    def form_valid(self, form):
+        form.instance.pedido_id = self.kwargs['pk']  # Asignar el pedido
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('pedido_list')  # Redirigir a la lista de pedidos después del abono
+
+ 

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
+from django.urls import reverse_lazy
+from .models import Abono, Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -38,11 +39,22 @@ class RolForm(forms.ModelForm):
     class Meta:
         model = Roles
         fields = '__all__'  # Esto incluirá todos los campos del modelo Roles.
-        
+
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['cliente', 'producto', 'observaciones', 'fecha_pedido', 'cantidad', 'fecha_germinacion', 'lugar', 'modelo', 'numero_lote', 'valor_pedido', 'abonos', 'saldo', 'cantidad_semilla', 'fecha_entrega', 'remision']
+        fields = ['cliente', 'producto', 'observaciones', 'fecha_pedido', 'cantidad', 'cantidad_semilla',
+                  'fecha_germinacion', 'fecha_entrega', 'lugar', 'modelo', 'numero_lote', 'valor_pedido', 'saldo', 'remision']
+
+class AbonoForm(forms.ModelForm):
+    class Meta:
+        model = Abono
+        fields = ['pedido', 'cantidad_abonada']
+        
+    def __init__(self, *args, **kwargs):
+        super(AbonoForm, self).__init__(*args, **kwargs)
+        # Cambiamos la etiqueta del campo 'cantidad_abonada'
+        self.fields['cantidad_abonada'].label = "Realizar nuevo abono"    
 
 
 class ClienteForm(forms.ModelForm):
@@ -50,11 +62,3 @@ class ClienteForm(forms.ModelForm):
         model = Cliente
         fields = ['cedula', 'nombre', 'apellido', 'direccion', 'telefono', 'email']
         
-class AbonoForm(forms.ModelForm):
-    class Meta:
-        model = Pedido
-        fields = ['abonos']
-
-    def __init__(self, *args, **kwargs):
-        super(AbonoForm, self).__init__(*args, **kwargs)
-        self.fields['abonos'].label = "Realizar nuevo abono"        
