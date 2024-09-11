@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Realizar Abono para Pedido {{ pedido.numero_lote }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Realizar Abono</button>
+</form>
+
+<p>Valor del pedido: {{ pedido.valor_pedido }}</p>
+<p>Total de abonos: {{ pedido.abonos }}</p>
+<p>Saldo restante: {{ pedido.saldo }}</p>
+{% endblock %}

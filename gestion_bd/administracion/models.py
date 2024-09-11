@@ -70,7 +70,7 @@ class Cliente(models.Model):
 # Modelo Pedido
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, default=1)  # ID de un producto por defecto
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, default=1)
     observaciones = models.TextField(null=True, blank=True)
     fecha_pedido = models.DateField()
     cantidad = models.IntegerField()
@@ -79,21 +79,18 @@ class Pedido(models.Model):
     modelo = models.CharField(max_length=50)
     numero_lote = models.CharField(max_length=50)
     valor_pedido = models.DecimalField(max_digits=10, decimal_places=2)
-    abonos = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    abonos = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)
     saldo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     cantidad_semilla = models.IntegerField()
     fecha_entrega = models.DateField(null=True, blank=True)
     remision = models.CharField(max_length=50, null=True, blank=True)
-    
-    class Meta:
-        db_table = 'Pedido' 
+
+    def save(self, *args, **kwargs):
+        # Calcula el saldo automáticamente
+        if self.abonos is None:
+            self.abonos = 0
+        self.saldo = self.valor_pedido - self.abonos
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Pedido {self.numero_lote} - Cliente: {self.cliente}"
-    
-    def save(self, *args, **kwargs):
-        # Al guardar un pedido, descontar la cantidad de productos del inventario
-        if self.pk is None:  # Solo descontar la cantidad si el pedido es nuevo
-            self.producto.cantidad -= self.cantidad
-            self.producto.save()  # Guardar los cambios en el inventario de productos
-        super(Pedido, self).save(*args, **kwargs)

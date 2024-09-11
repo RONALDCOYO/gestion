@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>¿Estás seguro de que deseas eliminar este pedido?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar eliminación</button>
+</form>
+<a href="{% url 'pedido_list' %}">Cancelar</a>
+{% endblock %}

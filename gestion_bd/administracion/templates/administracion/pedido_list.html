@@ -21,11 +21,18 @@
             <td>{{ pedido.valor_pedido }}</td>
             <td>
                 <a href="{% url 'pedido_edit' pedido.pk %}">Editar</a>
+                <a href="{% url 'pedido_delete' pedido.pk %}">Borrar</a>
                 <form action="{% url 'pedido_delete' pedido.pk %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit">Borrar</button>
                 </form>
             </td>
+            <td>
+                <a href="{% url 'pedido_edit' pedido.pk %}">Editar</a> |
+                <a href="{% url 'pedido_delete' pedido.pk %}">Eliminar</a> |
+                <a href="{% url 'realizar_abono' pedido.pk %}">Realizar Abono</a>
+            </td>
+      
         </tr>
         {% endfor %}
     </tbody>

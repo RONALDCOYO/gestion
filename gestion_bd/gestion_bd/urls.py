@@ -1,3 +1,4 @@
+from django import views
 from django.contrib import admin
 from django.urls import path
 from administracion import views as administracion_views
@@ -27,9 +28,14 @@ urlpatterns = [
     path('gestion/pedidos/', administracion_views.PedidoListView.as_view(), name='pedido_list'),
     path('gestion/pedidos/create/', administracion_views.PedidoCreateView.as_view(), name='pedido_create'),
     path('gestion/pedidos/<int:pk>/edit/', administracion_views.PedidoUpdateView.as_view(), name='pedido_edit'),
+    path('gestion/pedidos/<int:pk>/delete/', administracion_views.PedidoDeleteView.as_view(), name='pedido_delete'),
+    #Abonos
+    path('gestion/pedidos/<int:pk>/abono/', administracion_views.realizar_abono, name='realizar_abono'),
     #Clientes
     path('gestion/clientes/', administracion_views.ClienteListView.as_view(), name='clientes_list'),
     path('gestion/clientes/create/', administracion_views.ClienteCreateView.as_view(), name='cliente_create'),
     path('gestion/clientes/<int:pk>/edit/', administracion_views.ClienteUpdateView.as_view(), name='cliente_edit'),
     path('gestion/clientes/<int:pk>/delete/', administracion_views.ClienteDeleteView.as_view(), name='cliente_delete'),
+    
+    
 ]

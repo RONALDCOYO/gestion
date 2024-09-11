@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
 from .forms import (IntervinienteForm, ProductoForm, SucursalForm, 
-                    RolForm, RegistrationForm, PedidoForm, ClienteForm)
+                    RolForm, RegistrationForm, PedidoForm, ClienteForm, AbonoForm)
 from django.contrib.auth import authenticate, login
 
 
@@ -141,7 +141,7 @@ class PedidoCreateView(CreateView):
     model = Pedido
     form_class = PedidoForm
     template_name = 'administracion/pedido_form.html'
-    success_url = reverse_lazy('pedido_list')
+    success_url = reverse_lazy('pedido_list') # Redirigir a la lista de pedidos después de crear uno
 
     def form_valid(self, form):
         # Obtiene el producto y la cantidad del pedido
@@ -163,6 +163,32 @@ class PedidoUpdateView(UpdateView):
     form_class = PedidoForm
     template_name = 'administracion/pedido_form.html'
     success_url = reverse_lazy('pedido_list')
+    
+    
+class PedidoDeleteView(DeleteView):
+    model = Pedido
+    template_name = 'administracion/pedido_confirm_delete.html'
+    success_url = reverse_lazy('pedido_list')    
+    
+#Abonos
+
+def realizar_abono(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    if request.method == 'POST':
+        form = AbonoForm(request.POST, instance=pedido)
+        if form.is_valid():
+            nuevo_abono = form.cleaned_data['abonos']
+            # Sumar el nuevo abono al monto actual de abonos
+            pedido.abonos += nuevo_abono
+            # Recalcular el saldo
+            pedido.saldo = pedido.valor_pedido - pedido.abonos
+            pedido.save()
+            return redirect('pedido_list')  # O redirige a la página donde se muestran los pedidos
+    else:
+        form = AbonoForm(instance=pedido)
+    
+    return render(request, 'administracion/realizar_abono.html', {'form': form, 'pedido': pedido})    
+    
     
 class ClienteListView(ListView):
     model = Cliente

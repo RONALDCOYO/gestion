@@ -49,3 +49,12 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['cedula', 'nombre', 'apellido', 'direccion', 'telefono', 'email']
+        
+class AbonoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['abonos']
+
+    def __init__(self, *args, **kwargs):
+        super(AbonoForm, self).__init__(*args, **kwargs)
+        self.fields['abonos'].label = "Realizar nuevo abono"        
