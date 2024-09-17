@@ -1,10 +1,14 @@
-{% extends "base.html" %}
+<h2>Realizar abono para Pedido {{ pedido.numero_lote }}</h2>
 
-{% block content %}
-<h2>Realizar Abono</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Guardar Abono</button>
+    <button type="submit">Guardar Abono</button>
 </form>
-{% endblock %}
+
+<h3>Lista de Abonos</h3>
+<ul>
+    {% for abono in abonos %}
+        <li>{{ abono.fecha_abono }} - {{ abono.cantidad_abonada }}</li>
+    {% endfor %}
+</ul>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 # Modelo Roles
 class Roles(models.Model):
@@ -51,6 +52,9 @@ class Productos(models.Model):
 
     class Meta:
         db_table = 'Productos'
+        
+    def __str__(self):
+        return self.nombre    
 
 # Modelo Cliente
 class Cliente(models.Model):
@@ -68,22 +72,25 @@ class Cliente(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 # Modelo Pedido
-# Modelo Pedido
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
     observaciones = models.TextField(null=True, blank=True)
     fecha_pedido = models.DateField()
     cantidad = models.IntegerField()
-    cantidad_semilla = models.IntegerField()  # Verifica que exista este campo
+    cantidad_semilla = models.IntegerField(null=True, blank=True)  # Verifica que exista este campo
     fecha_germinacion = models.DateField(null=True, blank=True)
-    fecha_entrega = models.DateField(null=True, blank=True)
+    fecha_entrega = models.DateField(null=True, blank=True)  # Verifica que exista este campo
     lugar = models.CharField(max_length=100)
     modelo = models.CharField(max_length=50)
     numero_lote = models.CharField(max_length=50)
     valor_pedido = models.DecimalField(max_digits=10, decimal_places=2)
-    saldo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    saldo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  # Verifica que este campo también esté bien definido
     remision = models.CharField(max_length=50, null=True, blank=True)
+
+    def calcular_saldo(self):
+        total_abonos = self.lista_abonos.aggregate(total=Sum('cantidad_abonada'))['total'] or 0
+        return self.valor_pedido - total_abonos
 
     def __str__(self):
         return f"Pedido {self.numero_lote} - Cliente: {self.cliente}"
@@ -91,7 +98,7 @@ class Pedido(models.Model):
 
 # Modelo Abono
 class Abono(models.Model):
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='lista_abonos')
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='lista_abonos')  # Usamos 'lista_abonos' como related_name
     cantidad_abonada = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_abono = models.DateField(auto_now_add=True)
 

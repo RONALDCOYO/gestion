@@ -7,7 +7,7 @@ from .views import (
     IntervinienteListView, IntervinienteCreateView, IntervinienteUpdateView, IntervinienteDeleteView, IntervinientesDeleteView, IntervinientesUpdateView, IntervinientesView,
     ProductoListView, ProductoCreateView, ProductoUpdateView, ProductoDeleteView,
     SucursalListView, SucursalCreateView, SucursalUpdateView, SucursalDeleteView,
-    RolListView, RolCreateView, RolUpdateView, RolDeleteView
+    RolListView, RolCreateView, RolUpdateView, RolDeleteView, generar_reporte_pdf
 )
 
 urlpatterns = [
@@ -38,5 +38,9 @@ urlpatterns = [
     path('roles/<int:pk>/delete/', RolDeleteView.as_view(), name='rol_delete'),
     #Rutas para pedidos
     path('gestion/pedidos/', administracion_views.PedidoListView.as_view(), name='pedido_list'),
+    
+    #Rutas para reportes
+    path('reporte-pedidos/', views.reporte_pedidos, name='reporte_pedidos'),
+    path('reporte-pedidos-pdf/', generar_reporte_pdf, name='reporte_pedidos_pdf'),
     
 ]

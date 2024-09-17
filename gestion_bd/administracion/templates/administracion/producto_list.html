@@ -10,6 +10,7 @@
             <th>Descripción</th>
             <th>Categoría</th>
             <th>Precio</th>
+            <th>Cantida</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -21,6 +22,7 @@
             <td>{{ producto.descripcion }}</td>
             <td>{{ producto.categoria }}</td>
             <td>{{ producto.precio }}</td>
+            <td>{{ producto.cantidad }}</td>
             <td>
                 <a href="{% url 'producto_edit' producto.id %}">Editar</a>
                 <a href="{% url 'producto_delete' producto.id %}">Eliminar</a>

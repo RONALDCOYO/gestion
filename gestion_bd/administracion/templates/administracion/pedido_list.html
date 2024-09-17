@@ -8,6 +8,7 @@
         <tr>
             <th>Cliente</th>
             <th>Producto</th>
+            <th>Cantidad</th>
             <th>Fecha Pedido</th>
             <th>Valor</th>
             <th>Saldo</th>
@@ -21,6 +22,7 @@
         <tr>
             <td>{{ pedido.cliente.nombre }}</td>
             <td>{{ pedido.producto.nombre }}</td>
+            <td>{{ pedido.producto.cantidad }}</td>
             <td>{{ pedido.fecha_pedido }}</td>
             <td>{{ pedido.valor_pedido }}</td>
             <td>{{ pedido.saldo }}</td>
@@ -39,6 +41,33 @@
                     {% csrf_token %}
                     <button type="submit">Borrar</button>
                 </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<table>
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Valor Pedido</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.producto }}</td>
+            <td>{{ pedido.cantidad }}</td>
+            <td>{{ pedido.valor_pedido }}</td>
+            <td>{{ pedido.saldo_actual }}</td>  <!-- Mostrar el saldo calculado -->
+            <td>
+                <a href="{% url 'realizar_abono' pedido.pk %}">Realizar Abono</a>
             </td>
         </tr>
         {% endfor %}

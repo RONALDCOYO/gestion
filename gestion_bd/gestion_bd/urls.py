@@ -4,6 +4,7 @@ from django.urls import path
 from administracion import views as administracion_views
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', administracion_views.home, name='home'),
@@ -36,6 +37,8 @@ urlpatterns = [
     path('gestion/clientes/create/', administracion_views.ClienteCreateView.as_view(), name='cliente_create'),
     path('gestion/clientes/<int:pk>/edit/', administracion_views.ClienteUpdateView.as_view(), name='cliente_edit'),
     path('gestion/clientes/<int:pk>/delete/', administracion_views.ClienteDeleteView.as_view(), name='cliente_delete'),
-    
+    #Rutas para reportes
+    path('gestion/reporte-pedidos/', administracion_views.reporte_pedidos, name='reporte_pedidos'),
+    path('gestion/reporte-pedidos-pdf/', administracion_views.generar_reporte_pdf, name='reporte_pedidos_pdf'),
     
 ]

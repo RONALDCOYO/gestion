@@ -1,0 +1,29 @@
+<!-- templates/administracion/reporte_pedidos_pdf.html -->
+<h2>Reporte de Pedidos</h2>
+<table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Fecha Pedido</th>
+            <th>Valor</th>
+            <th>Abonos</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.producto }}</td>
+            <td>{{ pedido.fecha_pedido }}</td>
+            <td>{{ pedido.valor_pedido }}</td>
+            <td>{{ pedido.total_abonos }}</td>
+            <td>{{ pedido.saldo }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

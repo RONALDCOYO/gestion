@@ -4,6 +4,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Abono, Intervinientes, Productos, Sucursal, Roles, Pedido, Cliente
 from .forms import (IntervinienteForm, ProductoForm, SucursalForm, 
                     RolForm, RegistrationForm, PedidoForm, ClienteForm, AbonoForm)
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from django.contrib.auth import authenticate, login
 
 
@@ -134,11 +137,16 @@ class RolDeleteView(DeleteView):
 
 class PedidoListView(ListView):
     model = Pedido
-    template_name = 'pedidos.html'
-    context_object_name = 'pedidos'
+    template_name = 'administracion/pedido_list.html'
 
-    def get_queryset(self):
-        return Pedido.objects.prefetch_related('lista_abonos')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Añadir el cálculo del saldo para cada pedido
+        pedidos = Pedido.objects.all()
+        for pedido in pedidos:
+            pedido.saldo_actual = pedido.calcular_saldo()  # Añadir el saldo calculado
+        context['pedidos'] = pedidos
+        return context
 
 class PedidoCreateView(CreateView):
     model = Pedido
@@ -178,19 +186,23 @@ class PedidoDeleteView(DeleteView):
 def realizar_abono(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
     if request.method == 'POST':
-        form = AbonoForm(request.POST, instance=pedido)
+        form = AbonoForm(request.POST)
         if form.is_valid():
-            nuevo_abono = form.cleaned_data['abonos']
-            # Sumar el nuevo abono al monto actual de abonos
-            pedido.abonos += nuevo_abono
-            # Recalcular el saldo
-            pedido.saldo = pedido.valor_pedido - pedido.abonos
-            pedido.save()
-            return redirect('lista_abonos')  # O redirige a la página donde se muestran los pedidos
+            abono = form.save(commit=False)
+            abono.pedido = pedido  # Asignamos el pedido al abono
+            abono.save()
+            # Redirige a la vista de detalle del pedido o a la lista de pedidos
+            return redirect('pedido_list')
     else:
-        form = AbonoForm(instance=pedido)
-    
-    return render(request, 'administracion/realizar_abono.html', {'form': form, 'pedido': pedido})    
+        form = AbonoForm()
+
+    # Cambiamos a 'lista_abonos' según el related_name del modelo Abono
+    context = {
+        'form': form,
+        'pedido': pedido,
+        'abonos': pedido.lista_abonos.all()  # Accede a los abonos con el related_name
+    }
+    return render(request, 'administracion/abono_form.html', context)
     
     
 class ClienteListView(ListView):
@@ -226,6 +238,27 @@ class AbonoCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('pedido_list')  # Redirigir a la lista de pedidos después del abono
+        return reverse('pedido_list')  # Redirigir a la lista de pedidos después del 
+    
+    
+def reporte_pedidos(request):
+    pedidos = Pedido.objects.all()
+    return render(request, 'administracion/reporte_pedidos.html', {'pedidos': pedidos})    
 
+
+def generar_reporte_pdf(request):
+    pedidos = Pedido.objects.all()
+    template_path = 'administracion/reporte_pedidos_pdf.html'
+    context = {'pedidos': pedidos}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte_pedidos.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    if pisa_status.err:
+        return HttpResponse('Ocurrió un error al generar el PDF')
+    return response
  

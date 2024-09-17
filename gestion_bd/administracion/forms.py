@@ -43,18 +43,14 @@ class RolForm(forms.ModelForm):
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['cliente', 'producto', 'observaciones', 'fecha_pedido', 'cantidad', 'cantidad_semilla',
-                  'fecha_germinacion', 'fecha_entrega', 'lugar', 'modelo', 'numero_lote', 'valor_pedido', 'saldo', 'remision']
+        fields = ['cliente', 'producto', 'observaciones', 'fecha_pedido', 'cantidad', 'cantidad_semilla', 'fecha_germinacion', 'fecha_entrega', 'lugar', 'modelo', 'numero_lote', 'valor_pedido', 'remision']
+
 
 class AbonoForm(forms.ModelForm):
     class Meta:
         model = Abono
-        fields = ['pedido', 'cantidad_abonada']
-        
-    def __init__(self, *args, **kwargs):
-        super(AbonoForm, self).__init__(*args, **kwargs)
-        # Cambiamos la etiqueta del campo 'cantidad_abonada'
-        self.fields['cantidad_abonada'].label = "Realizar nuevo abono"    
+        fields = ['cantidad_abonada']  # Solo necesitas este campo
+    
 
 
 class ClienteForm(forms.ModelForm):
